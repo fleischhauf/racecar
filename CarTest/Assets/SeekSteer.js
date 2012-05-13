@@ -56,11 +56,11 @@
            xform.position +=currentHeading * Time.deltaTime * speed;
        if(faceHeading)
            xform.LookAt(xform.position+currentHeading);
-		Debug.Log(Vector3.Distance(xform.position,waypoints[targetwaypoint].position));
+		//Debug.Log(Vector3.Distance(xform.position,waypoints[targetwaypoint].position));
        if(Vector3.Distance(xform.position,waypoints[targetwaypoint].position)<=waypointRadius)
        {
            targetwaypoint++;
-           Debug.Log(targetwaypoint);
+           //Debug.Log(targetwaypoint);
            if(targetwaypoint>=waypoints.Length)
            {
                targetwaypoint = 0;

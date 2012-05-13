@@ -30,10 +30,12 @@ function Start () {
 
 function Update () {
 //	Drive.
-	var fwdDrive = Input.GetAxis("Vertical") * drive;
+	var inputAxis = Input.GetAxis("Vertical");
+	var fwdDrive = inputAxis * drive;
 	colls[2].motorTorque = fwdDrive;
 	colls[3].motorTorque = fwdDrive;
-	//Debug.Log("fwdDrive:"+fwdDrive);
+	//Debug.Log("fwdDrive:"+Input.GetAxis("Vertical"));
+
 //	Steering.
 	var steer = Input.GetAxis("Horizontal") * maxSteer;
 	var steerRot = Quaternion.Euler(0, steer, 0);
@@ -47,4 +49,11 @@ function Update () {
 		var angle = 360 * rps * Time.fixedDeltaTime;
 		wGraphics[i].Rotate(-Vector3.up * angle);
 	}
+	var vel = rigidbody.velocity.magnitude;
+		gearSound(vel);
+}
+function gearSound(vertAxis){
+	var vertAxis2:float  = vertAxis;
+	audio.pitch = vertAxis2/50;
+	Debug.Log(audio.pitch);
 }
