@@ -3,6 +3,8 @@
 var FrontLeftWheel : WheelCollider;
 var FrontRightWheel : WheelCollider;
 
+var PlayerCar : GameObject;
+
 var GearRatio : float[];
 var CurrentGear : int = 0;
 
@@ -11,41 +13,34 @@ var MaxEngineRPM : float = 3000.0;
 var MinEngineRPM : float = 1000.0;
 private var EngineRPM : float = 0.0;
 
-// Here's all the variables for the AI, the waypoints are determined in the "GetWaypoints" function.
-// the waypoint container is used to search for all the waypoints in the scene, and the current
-// waypoint is used to determine which waypoint in the array the car is aiming for.
 var waypointContainer : GameObject;
 private var waypoints : Array;
 private var currentWaypoint : int = 0;
 
-// input steer and input torque are the values substituted out for the player input. The 
-// "NavigateTowardsWaypoint" function determines values to use for these variables to move the car
-// in the desired direction.
 private var inputSteer : float = 0.0;
 private var inputTorque : float = 0.0;
 
 function Start () {
 	rigidbody.centerOfMass.y = -1.5;
-	
-	// Call the function to determine the array of waypoints. This sets up the array of points by finding
-	// transform components inside of a source container.
+
 	GetWaypoints();
 }
 
 function Update () {
 	rigidbody.drag = rigidbody.velocity.magnitude / 250;
-	
-	// Call the funtion to determine the desired input values for the car. This essentially steers and
-	// applies gas to the engine.
+
 	NavigateTowardsWaypoint();
 	
 	EngineRPM = (FrontLeftWheel.rpm + FrontRightWheel.rpm)/2 * GearRatio[CurrentGear];
 	ShiftGears();
 	
+	Debug.Log(PlayerCar.transform.position);
 
 	FrontLeftWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque;
 	FrontRightWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque;
-
+	
+	if (PlayerCar.transform.position.x<50) {FrontLeftWheel.motorTorque=0; FrontRightWheel.motorTorque=0;}
+	
 	FrontLeftWheel.steerAngle = 10 * inputSteer;
 	FrontRightWheel.steerAngle = 10 * inputSteer;
 }
