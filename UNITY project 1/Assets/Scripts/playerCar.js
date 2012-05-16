@@ -13,6 +13,7 @@ private var EngineRPM : float = 0.0;
 var GearRatio : float[];
 var CurrentGear : int = 0;
 
+//var wayPointContainer : GameObject;
 
 function Start () {
 	rigidbody.centerOfMass.y = -1.5;
@@ -23,7 +24,7 @@ function Update () {
 	rigidbody.drag = rigidbody.velocity.magnitude / 250;
 	EngineRPM = (FLW.rpm + FRW.rpm)/2 * GearRatio[CurrentGear];
 	ShiftGears();
-			
+	
 	FLW.motorTorque = EngineTorque / GearRatio[CurrentGear] * Input.GetAxis("Vertical");
 	FRW.motorTorque = EngineTorque / GearRatio[CurrentGear] * Input.GetAxis("Vertical");
 	//RLW.motorTorque = EngineTorque / GearRatio[CurrentGear] * Input.GetAxis("Vertical");

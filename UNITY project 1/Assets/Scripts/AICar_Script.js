@@ -33,13 +33,22 @@ function Update () {
 	
 	EngineRPM = (FrontLeftWheel.rpm + FrontRightWheel.rpm)/2 * GearRatio[CurrentGear];
 	ShiftGears();
-	
-	Debug.Log(PlayerCar.transform.position);
 
 	FrontLeftWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque;
 	FrontRightWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque;
 	
-	if (PlayerCar.transform.position.x<50) {FrontLeftWheel.motorTorque=0; FrontRightWheel.motorTorque=0;}
+	//***************************************************************
+	var playerX : float =PlayerCar.transform.position.x;
+	var playerZ : float =PlayerCar.transform.position.z;
+	var AIX : float =transform.position.x;
+	var AIZ : float =transform.position.z;
+	var distance1 : float = ((AIX-playerX)*(AIX-playerX))+((AIZ-playerZ)*(AIZ-playerZ));
+	var distance2 : float = Mathf.Sqrt(distance1);
+	var distance3 : float = 1-(distance2/1000);
+	Debug.Log(distance3);
+	//***************************************************************
+	
+	//if (PlayerCar.transform.position.x<10) {FrontLeftWheel.motorTorque=0; FrontRightWheel.motorTorque=0;}
 	
 	FrontLeftWheel.steerAngle = 10 * inputSteer;
 	FrontRightWheel.steerAngle = 10 * inputSteer;
