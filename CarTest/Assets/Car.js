@@ -4,12 +4,21 @@
 var drive: float;
 var maxSteer: float;
 var centerOfMass: Vector3;
+var height : int;
+var width : int;
+
+var start_collider : Collider;
+var middle_collider : Collider;
+
 
 private var wheels: Transform[];
 private var wGraphics: Transform[];
 private var colls: WheelCollider[];
 
-
+private var passed_start : int = 0;
+private var passed_middle : int = 0;
+private var lap : int = 0;
+private var isfirst : int = 1;
 function Start () {
 	wheels = new Transform[4];
 	wheels[0] = transform.Find("wcFL");
@@ -26,8 +35,16 @@ function Start () {
 	}
 	
 	rigidbody.centerOfMass = centerOfMass;
+	
 }
-
+// JavaScript
+function OnGUI () {
+	GUI.Label (Rect (width,height-20,150,100),"LAP : "+lap);
+	GUI.Label(Rect (width,height,150,100), (rigidbody.velocity.magnitude * 3.6 )+" km/h");
+	//if (GUI.Button (Rect (height,width,150,100), "I am a button")) {
+	//	print ("You clicked the button!");
+	//}
+}
 function Update () {
 //	Drive.
 	var inputAxis = Input.GetAxis("Vertical");
@@ -51,9 +68,30 @@ function Update () {
 	}
 	var vel = rigidbody.velocity.magnitude;
 		gearSound(vel);
+		
+			
+	//update laps:
+	if(passed_start == 1 && passed_middle == 1 && isfirst == 0){lap += 1; passed_start = 0; passed_middle = 0; isfirst = 1;}
+}
+function OnTriggerExit(collider : Collider) {
+    // Debug-draw all contact points and normals
+    //for (var contact : ContactPoint in collision.contacts) {
+    //    Debug.DrawRay(contact.point, contact.normal, Color.white);
+    //}
+    //Debug.Log("collision with " + collider.name);
+    if(collider == start_collider ){passed_start = 1; Debug.Log("passed start");}
+    if(collider == middle_collider ){passed_middle = 1; Debug.Log("passed middle");}
+    if(collider == start_collider && passed_start == 1 && passed_middle == 1 && isfirst == 1){isfirst = 0 ; Debug.Log("passed middle");}
+    else{Debug.Log("BOOOM!");}
+    //maybe usefull for crashes:
+    // Play a sound if the coliding objects had a big impact.        
+    //if (collision.relativeVelocity.magnitude > 2)
+    //    audio.Play();
 }
 function gearSound(vertAxis){
 	var vertAxis2:float  = vertAxis;
 	audio.pitch = vertAxis2/50;
-	Debug.Log(audio.pitch);
+	//Debug.Log(audio.pitch);
 }
+
+

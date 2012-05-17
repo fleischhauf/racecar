@@ -45,7 +45,7 @@ function Update () {
 	var distance1 : float = ((AIX-playerX)*(AIX-playerX))+((AIZ-playerZ)*(AIZ-playerZ));
 	var distance2 : float = Mathf.Sqrt(distance1);
 	var distance3 : float = 1-(distance2/1000);
-	Debug.Log(distance3);
+	//Debug.Log(distance3);
 	//***************************************************************
 	
 	//if (PlayerCar.transform.position.x<10) {FrontLeftWheel.motorTorque=0; FrontRightWheel.motorTorque=0;}

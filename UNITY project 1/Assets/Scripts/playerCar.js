@@ -13,6 +13,7 @@ private var EngineRPM : float = 0.0;
 var GearRatio : float[];
 var CurrentGear : int = 0;
 
+var velocity : float = 0;
 //var wayPointContainer : GameObject;
 
 function Start () {
@@ -43,6 +44,21 @@ function Update () {
 		
 	FLW.steerAngle = 10 * Input.GetAxis("Horizontal");
 	FRW.steerAngle = 10 * Input.GetAxis("Horizontal");
+	
+	velocity = (FLW.motorTorque + FRW.motorTorque) / 2;
+	
+	update_gui(velocity);
+}
+function update_gui(torque){
+
+}
+function OnGUI () {
+	var kph = rigidbody.velocity.magnitude * 3.6;
+	GUI.Label(Rect (300,300,150,100),"SPEED : "+kph);
+	//lab.Text = "SPEED : "+velocity;
+	if (GUI.Button (Rect (10,10,150,100), "I am a button")) {
+		print ("You clicked the button!");
+	}
 }
 
 function ShiftGears() {
