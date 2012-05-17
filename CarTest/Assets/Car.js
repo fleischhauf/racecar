@@ -4,12 +4,15 @@
 var drive: float;
 var maxSteer: float;
 var centerOfMass: Vector3;
-var height : int;
-var width : int;
+
+var lap : int = 0;
 
 var start_collider : Collider;
 var middle_collider : Collider;
 
+
+var motorSound : AudioSource;
+var slideSound : AudioSource;
 
 private var wheels: Transform[];
 private var wGraphics: Transform[];
@@ -17,7 +20,7 @@ private var colls: WheelCollider[];
 
 private var passed_start : int = 0;
 private var passed_middle : int = 0;
-private var lap : int = 0;
+
 private var isfirst : int = 1;
 function Start () {
 	wheels = new Transform[4];
@@ -36,15 +39,15 @@ function Start () {
 	
 	rigidbody.centerOfMass = centerOfMass;
 	
+	var aSources = GetComponents(AudioSource);
+	motorSound = aSources[0];
+	slideSound = aSources[1];
+	
+	motorSound.Play();
+	slideSound.Play();
+	
 }
-// JavaScript
-function OnGUI () {
-	GUI.Label (Rect (width,height-20,150,100),"LAP : "+lap);
-	GUI.Label(Rect (width,height,150,100), (rigidbody.velocity.magnitude * 3.6 )+" km/h");
-	//if (GUI.Button (Rect (height,width,150,100), "I am a button")) {
-	//	print ("You clicked the button!");
-	//}
-}
+
 function Update () {
 //	Drive.
 	var inputAxis = Input.GetAxis("Vertical");
@@ -68,7 +71,7 @@ function Update () {
 	}
 	var vel = rigidbody.velocity.magnitude;
 		gearSound(vel);
-		
+	wheelSound();
 			
 	//update laps:
 	if(passed_start == 1 && passed_middle == 1 && isfirst == 0){lap += 1; passed_start = 0; passed_middle = 0; isfirst = 1;}
@@ -79,10 +82,10 @@ function OnTriggerExit(collider : Collider) {
     //    Debug.DrawRay(contact.point, contact.normal, Color.white);
     //}
     //Debug.Log("collision with " + collider.name);
-    if(collider == start_collider ){passed_start = 1; Debug.Log("passed start");}
-    if(collider == middle_collider ){passed_middle = 1; Debug.Log("passed middle");}
-    if(collider == start_collider && passed_start == 1 && passed_middle == 1 && isfirst == 1){isfirst = 0 ; Debug.Log("passed middle");}
-    else{Debug.Log("BOOOM!");}
+    if(collider == start_collider ){passed_start = 1; }
+    if(collider == middle_collider ){passed_middle = 1; }
+    if(collider == start_collider && passed_start == 1 && passed_middle == 1 && isfirst == 1){isfirst = 0 ;}
+    else{}
     //maybe usefull for crashes:
     // Play a sound if the coliding objects had a big impact.        
     //if (collision.relativeVelocity.magnitude > 2)
@@ -90,8 +93,25 @@ function OnTriggerExit(collider : Collider) {
 }
 function gearSound(vertAxis){
 	var vertAxis2:float  = vertAxis;
-	audio.pitch = vertAxis2/50;
+	motorSound.pitch = vertAxis2/50;
 	//Debug.Log(audio.pitch);
+}
+function wheelSound(){
+	var sidewayslip:float = 0.0;
+	for(var i = 0 ; i < 4; i++){
+		var wheelcollInfo : WheelHit;
+		colls[i].GetGroundHit(wheelcollInfo);
+		sidewayslip += wheelcollInfo.sidewaysSlip;
+		//sidewayslip += colls[i].GetGroundHit().sidewaysSlip;
+	}
+	sidewayslip = sidewayslip/4;
+	Debug.Log("avg sidewayslip:"+sidewayslip);
+	if(sidewayslip > 2){
+		slideSound.volume = Mathf.Abs(sidewayslip)/10 ;
+		}
+	else{
+		slideSound.volume = 0;
+	}
 }
 
 

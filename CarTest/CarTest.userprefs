@@ -2,9 +2,9 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Car.js">
     <Files>
-      <File FileName="Assets\Car.js" Line="57" Column="28" />
-      <File FileName="Assets\lightning.js" Line="11" Column="22" />
-      <File FileName="Assets\SeekSteer.js" Line="27" Column="12" />
+      <File FileName="Assets\main.js" Line="60" Column="4" />
+      <File FileName="Assets\Car.js" Line="109" Column="20" />
+      <File FileName="Assets\SeekSteer.js" Line="75" Column="15" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
