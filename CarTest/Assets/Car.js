@@ -51,17 +51,19 @@ function Start () {
 function Update () {
 //	Drive.
 	var inputAxis = Input.GetAxis("Vertical");
+	inputAxis = -Input.acceleration.x;
 	var fwdDrive = inputAxis * drive;
 	colls[2].motorTorque = fwdDrive;
 	colls[3].motorTorque = fwdDrive;
-	//Debug.Log("fwdDrive:"+Input.GetAxis("Vertical"));
+	Debug.Log("fwdDrive:"+Input.GetAxis("Vertical"));
 
 //	Steering.
 	var steer = Input.GetAxis("Horizontal") * maxSteer;
+	steer = Input.acceleration.y * maxSteer;
 	var steerRot = Quaternion.Euler(0, steer, 0);
 	wheels[0].localRotation = steerRot;
 	wheels[1].localRotation = steerRot;
-	//Debug.Log("steer:"+steer);
+	Debug.Log("steer:"+Input.GetAxis("Horizontal"));
 //	Wheel rotation.
 	for (var i = 0; i < 4; i++) {
 	//	Revs per second.
@@ -105,7 +107,7 @@ function wheelSound(){
 		//sidewayslip += colls[i].GetGroundHit().sidewaysSlip;
 	}
 	sidewayslip = sidewayslip/4;
-	Debug.Log("avg sidewayslip:"+sidewayslip);
+	//Debug.Log("avg sidewayslip:"+sidewayslip);
 	if(sidewayslip > 2){
 		slideSound.volume = Mathf.Abs(sidewayslip)/10 ;
 		}
