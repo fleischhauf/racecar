@@ -51,7 +51,10 @@ function Start () {
 function Update () {
 //	Drive.
 	var inputAxis = Input.GetAxis("Vertical");
-	inputAxis = -Input.acceleration.x;
+	var acc_input = -Input.acceleration.x;
+	if(acc_input  !=0){
+		inputAxis =- Input.acceleration.x;
+	}
 	var fwdDrive = inputAxis * drive;
 	colls[2].motorTorque = fwdDrive;
 	colls[3].motorTorque = fwdDrive;
@@ -59,7 +62,10 @@ function Update () {
 
 //	Steering.
 	var steer = Input.GetAxis("Horizontal") * maxSteer;
-	steer = Input.acceleration.y * maxSteer;
+	var acc_steer = Input.acceleration.y * maxSteer;
+	if(acc_steer != 0){
+		steer = Input.acceleration.y * maxSteer;
+	}
 	var steerRot = Quaternion.Euler(0, steer, 0);
 	wheels[0].localRotation = steerRot;
 	wheels[1].localRotation = steerRot;
