@@ -2,8 +2,8 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Car.js">
     <Files>
-      <File FileName="Assets\main.js" Line="80" Column="5" />
-      <File FileName="Assets\Car.js" Line="62" Column="42" />
+      <File FileName="Assets\Car.js" Line="54" Column="16" />
+      <File FileName="Assets\main.js" Line="1" Column="1" />
       <File FileName="Assets\SeekSteer.js" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>

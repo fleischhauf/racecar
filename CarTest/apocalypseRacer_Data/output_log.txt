@@ -1,6 +1,6 @@
 GfxDevice: creating device client; threaded=1
 Direct3D:
-    Version:  Direct3D 9.0c [nvd3dum.dll 8.17.12.9610]
+    Version:  Direct3D 9.0c [nvd3dum.dll 8.17.13.142]
     Renderer: NVIDIA GeForce GTS 250M 
     Vendor:   NVIDIA
     VRAM:     978 MB (via DXGI)
