@@ -19,6 +19,7 @@ private var EngineRPM : float = 0.0;
 // the waypoint container is used to search for all the waypoints in the scene, and the current
 // waypoint is used to determine which waypoint in the array the car is aiming for.
 var waypointContainer : GameObject;
+
 private var waypoints : Array;
 private var currentWaypoint : int = 0;
 
@@ -29,6 +30,10 @@ private var inputSteer : float = 0.0;
 private var inputTorque : float = 0.0;
 
 
+
+
+var current_waypoint = 0;
+var RelativeWaypointPosition : Vector3 = Vector3( 0,0,0);
 // player car for the purpose of cheating
 var playerCar : GameObject;
 
@@ -49,7 +54,6 @@ function Update () {
 	//cheating
 	GetPlayerDist();
 	
-	
 	// This is to limit the maximum speed of the car, adjusting the drag probably isn't the best way of doing it,
 	// but it's easy, and it doesn't interfere with the physics processing.
 	
@@ -61,11 +65,9 @@ function Update () {
 		if(playerAhead == 0){	//make AI slower
 			
 			//250 normal speed ?, if drag bigger, then AI is slower !
-			//Debug.Log(factor/250);
 			rigidbody.drag = Mathf.Abs(rigidbody.velocity.magnitude / (250-factor));//250;
 		
 		}else{ //make AI faster
-			//Debug.Log(factor/250);
 			rigidbody.drag = Mathf.Abs(rigidbody.velocity.magnitude / (250+factor));
 		
 		}
@@ -103,9 +105,6 @@ function Update () {
 	
 	//game over stop car
 	if(race_finished){
-		Debug.Log(rigidbody.velocity.magnitude);
-		//FrontLeftWheel.motorTorque = FrontLeftWheel.motorTorque * Mathf.Pow(0.01,updates_after_finish);
-		//FrontRightWheel.motorTorque = FrontRightWheel.motorTorque * Mathf.Pow(0.01,updates_after_finish);
 		rigidbody.drag = rigidbody.drag *Mathf.Pow(1.01,updates_after_finish);
 		updates_after_finish += 1;
 		if(rigidbody.velocity.magnitude <= 5){
@@ -160,7 +159,8 @@ function GetWaypoints () {
 function NavigateTowardsWaypoint () {
 	// now we just find the relative position of the waypoint from the car transform,
 	// that way we can determine how far to the left and right the waypoint is.
-	var RelativeWaypointPosition : Vector3 = transform.InverseTransformPoint( Vector3( 
+	current_waypoint = currentWaypoint;
+	RelativeWaypointPosition = transform.InverseTransformPoint( Vector3( 
 												waypoints[currentWaypoint].position.x, 
 												transform.position.y, 
 												waypoints[currentWaypoint].position.z ) );
@@ -206,15 +206,12 @@ function GetPlayerDist() {
 	playerDist = distPlayer;
 	if(playerDistVec.z > 0.0 ){
 		playerAhead = 1;
-		//Debug.Log("player ahead !! dist:");
-		//Debug.Log(distPlayer);
+
 	}else{
 		playerAhead = 0;
-		//Debug.Log("player behind !! dist:");
-		//Debug.Log(distPlayer);
+
 	}
-	//Debug.Log("vec:"+playerDist);
-	//Debug.Log(playerdist);
+
 }
 ///LAP COUNTER
 var finish_lap : GameObject;
@@ -225,16 +222,13 @@ var max_laps : int = 0;
 var race_finished : boolean = false;
 function OnTriggerEnter(other : Collider){
 	
-	//Debug.Log("trigger entered !! hli:"+half_lap_ind+" lc:"+lap_count+" finish:"+(other.collider == finish_lap.collider)+" "+(other.collider == half_lap.collider));
 	
 	if(other.collider == finish_lap.collider && half_lap_ind == 1){
 		half_lap_ind = 0;
 		lap_count = lap_count + 1;
-		Debug.Log("lap_count = "+lap_count);
 	}
 	
 	if(other.collider == half_lap.collider && half_lap_ind == 0){
-		Debug.Log("half_lap reached");
 		half_lap_ind = 1;
 	}
 	if(lap_count >= max_laps){
@@ -242,3 +236,7 @@ function OnTriggerEnter(other : Collider){
 	}
 
 }
+//returns waypoint array to be accessible by other scripts
+function getWaypoints(){
+	return(waypoints);
+	}
