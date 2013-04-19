@@ -62,6 +62,7 @@ function Update () {
 	rigidbody.drag = rigidbody.velocity.magnitude / 250;//250;
 	if(playerDist != 0.0){
 		var factor : float = Mathf.Abs(playerDist);
+		if(factor>=250){factor = 249.99;}
 		if(playerAhead == 0){	//make AI slower
 			
 			//250 normal speed ?, if drag bigger, then AI is slower !
