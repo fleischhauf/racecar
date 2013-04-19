@@ -189,6 +189,10 @@ function update_gui(){
 	else if(list_vectors[2][0] == 0){
 		postext = "Pos:3/3";
 	}
+	var s = list_vectors[0][0]+" "+list_vectors[0][1]+" "+list_vectors[0][2]+" "+list_vectors[0][3]+
+	"|"+list_vectors[1][0]+" "+list_vectors[1][1]+" "+list_vectors[1][2]+" "+list_vectors[1][3]+
+	"|"+list_vectors[2][0]+" "+list_vectors[2][1]+" "+list_vectors[2][2]+" "+list_vectors[2][3];
+	Debug.Log(s);
 	gui.text = postext + "\n" + laps + "\n" + speed;
 }
 
