@@ -41,6 +41,7 @@ private var playerAhead : int = 0;
 private var playerDist : float = 0.0;
 
 private var updates_after_finish = 0;
+
 function Start () {
 	// I usually alter the center of mass to make the car more stable. I'ts less likely to flip this way.
 	rigidbody.centerOfMass.y = -1.5;
@@ -62,7 +63,9 @@ function Update () {
 	rigidbody.drag = rigidbody.velocity.magnitude / 250;//250;
 	if(playerDist != 0.0){
 		var factor : float = Mathf.Abs(playerDist);
+		//Debug.Log("playerAhead:"+playerAhead+" factor:"+factor);
 		if(factor>=250){factor = 249.99;}
+		Debug.Log("speedfactor:"+factor+" playerAhead:"+playerAhead);
 		if(playerAhead == 0){	//make AI slower
 			
 			//250 normal speed ?, if drag bigger, then AI is slower !
@@ -143,7 +146,8 @@ function ShiftGears() {
 		CurrentGear = AppropriateGear;
 	}
 }
-
+//distance from start to waypoint[x].
+private var waypoint_dist:float[];
 function GetWaypoints () {
 	// Now, this function basically takes the container object for the waypoints, then finds all of the transforms in it,
 	// once it has the transforms, it checks to make sure it's not the container, and adds them to the array of waypoints.
@@ -154,6 +158,16 @@ function GetWaypoints () {
 		if ( potentialWaypoint != waypointContainer.transform ) {
 			waypoints[ waypoints.length ] = potentialWaypoint;
 		}
+	}
+	var old_wp : Transform = waypoints[waypoints.length-1];
+	var counter = 0;
+	var sum_dist = 0.0;
+	waypoint_dist = new Array(waypoints.length);
+	for (var wp : Transform in waypoints){
+		sum_dist  = sum_dist + (wp.position-old_wp.position).magnitude;
+		waypoint_dist[ counter] = sum_dist;
+		counter = counter+1;
+		old_wp = wp;
 	}
 }
 
@@ -198,21 +212,31 @@ function GetPlayerDist() {
 	//																playerCar.transform.z));
 	// z positive -> player ahead -> accelerate
 	// z negative -> player behind -> deccelerate
-	var playerDistVec :Vector3 = transform.InverseTransformPoint(Vector3(playerCar.rigidbody.transform.position.x,
-																	0,
-																	playerCar.rigidbody.transform.position.z));
+
+	var player_script : PlayerCar_Script = playerCar.GetComponent(PlayerCar_Script);
+	var p_laps = player_script.lap_count;
+	var p_wp = player_script.current_waypoint;
+	var p_dist = player_script.dist_waypoint;
 	
-	var distPlayer : float = playerDistVec.magnitude;
+	var player_dist_on_track = 0;
+	//var playerDistVec :Vector3 = transform.InverseTransformPoint(Vector3(playerCar.rigidbody.transform.position.x,
+	//																0,
+	//																playerCar.rigidbody.transform.position.z));
 	
-	playerDist = distPlayer;
-	if(playerDistVec.z > 0.0 ){
+	//var distPlayer : float = playerDistVec.magnitude;
+	playerDist = p_laps * waypoint_dist[waypoint_dist.length-1] + waypoint_dist[p_wp]- p_dist;
+	computerDist = lap_count * waypoint_dist[waypoint_dist.length-1] + waypoint_dist[current_waypoint] - RelativeWaypointPosition.magnitude;
+
+	//playerDist = distPlayer;
+	if((playerDist-computerDist) > 0.0 ){
 		playerAhead = 1;
 
 	}else{
 		playerAhead = 0;
-
 	}
-
+	var pd = playerDist;
+	playerDist = Mathf.Abs(playerDist-computerDist);
+	
 }
 ///LAP COUNTER
 var finish_lap : GameObject;

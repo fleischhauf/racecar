@@ -192,7 +192,7 @@ function update_gui(){
 	var s = list_vectors[0][0]+" "+list_vectors[0][1]+" "+list_vectors[0][2]+" "+list_vectors[0][3]+
 	"|"+list_vectors[1][0]+" "+list_vectors[1][1]+" "+list_vectors[1][2]+" "+list_vectors[1][3]+
 	"|"+list_vectors[2][0]+" "+list_vectors[2][1]+" "+list_vectors[2][2]+" "+list_vectors[2][3];
-	Debug.Log(s);
+	//Debug.Log(s);
 	gui.text = postext + "\n" + laps + "\n" + speed;
 }
 
@@ -253,8 +253,8 @@ function OnTriggerEnter(other : Collider){
 
 }
 private var waypoints;
-private var current_waypoint = 0;
-private var dist_waypoint = 0.0;
+ var current_waypoint = 0;
+ var dist_waypoint = 0.0;
 //finding the position in amongst other players:
 function findNextWaypoint(){
 	// now we just find the relative position of the waypoint from the car transform,
