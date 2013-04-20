@@ -64,7 +64,7 @@ function Update () {
 	if(playerDist != 0.0){
 		var factor : float = Mathf.Abs(playerDist);
 		//Debug.Log("playerAhead:"+playerAhead+" factor:"+factor);
-		if(factor>=250){factor = 249.99;}
+		if(factor>=250){factor = 150.00;}
 		Debug.Log("speedfactor:"+factor+" playerAhead:"+playerAhead);
 		if(playerAhead == 0){	//make AI slower
 			
