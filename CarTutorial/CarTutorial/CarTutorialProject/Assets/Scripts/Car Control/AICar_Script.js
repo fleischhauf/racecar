@@ -41,11 +41,12 @@ private var playerAhead : int = 0;
 private var playerDist : float = 0.0;
 
 private var updates_after_finish = 0;
-
+private var rand : int = 0;
 function Start () {
 	// I usually alter the center of mass to make the car more stable. I'ts less likely to flip this way.
 	rigidbody.centerOfMass.y = -1.5;
-	
+	var p = Random.value;
+	rand = Mathf.Floor((p*30));
 	// Call the function to determine the array of waypoints. This sets up the array of points by finding
 	// transform components inside of a source container.
 	GetWaypoints();
@@ -64,8 +65,8 @@ function Update () {
 	if(playerDist != 0.0){
 		var factor : float = Mathf.Abs(playerDist);
 		//Debug.Log("playerAhead:"+playerAhead+" factor:"+factor);
-		if(factor>=250){factor = 150.00;}
-		Debug.Log("speedfactor:"+factor+" playerAhead:"+playerAhead);
+		if(factor>=150){factor = 150;}
+		//Debug.Log("speedfactor:"+factor+" playerAhead:"+playerAhead);
 		if(playerAhead == 0){	//make AI slower
 			
 			//250 normal speed ?, if drag bigger, then AI is slower !
@@ -100,8 +101,9 @@ function Update () {
 	
 	// finally, apply the values to the wheels.	The torque applied is divided by the current gear, and
 	// multiplied by the calculated AI input variable.
-	FrontLeftWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque;
-	FrontRightWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque;
+
+	FrontLeftWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque + rand;
+	FrontRightWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque + rand;
 		
 	// the steer angle is an arbitrary value multiplied by the calculated AI input.
 	FrontLeftWheel.steerAngle = 10 * inputSteer;
